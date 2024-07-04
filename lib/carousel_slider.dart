@@ -208,27 +208,12 @@ class CarouselSliderState extends State<CarouselSlider>
       );
     }
 
-    return RawGestureDetector(
-      behavior: HitTestBehavior.opaque,
-      gestures: {
-        _MultipleGestureRecognizer:
-            GestureRecognizerFactoryWithHandlers<_MultipleGestureRecognizer>(
-                () => _MultipleGestureRecognizer(),
-                (_MultipleGestureRecognizer instance) {
-          instance.onStart = (_) {
-            onStart();
-          };
-          instance.onDown = (_) {
-            onPanDown();
-          };
-          instance.onEnd = (_) {
-            onPanUp();
-          };
-          instance.onCancel = () {
-            onPanUp();
-          };
-        }),
+    return Listener(
+      onPointerUp: (_) {
+        onStart();
+        onPanUp();
       },
+      onPointerDown: (_) => onPanDown(),
       child: NotificationListener(
         onNotification: (Notification notification) {
           if (widget.options.onScrolled != null &&
@@ -394,5 +379,3 @@ class CarouselSliderState extends State<CarouselSlider>
     ));
   }
 }
-
-class _MultipleGestureRecognizer extends PanGestureRecognizer {}
